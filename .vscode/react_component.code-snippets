@@ -1,0 +1,77 @@
+{
+	// Place your fit-app workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"React component": {
+		"scope": "typescriptreact, javascriptreact",
+		"prefix": "rc",
+		"body": [
+			"import React from 'react'",
+			"import styled from 'styled-components'\n",
+			"export default function ${TM_FILENAME/(.*)\\..+$/$1/}(props) {\n",
+			"\tconst { style } = props\n",
+			"\treturn (\n\t\t<Styled${TM_FILENAME/(.*)\\..+$/$1/} style={style}>\n\t\t\n\t\t</Styled${TM_FILENAME/(.*)\\..+$/$1/}>\n\t)",
+			"}\n",
+			"const Styled${TM_FILENAME/(.*)\\..+$/$1/} = styled.div`\n",
+			"`",
+		],
+		"description": "Default react component base"
+	},
+	"Storybook story": {
+		"scope": "typescriptreact",
+		"prefix": "stbk",
+		"body": [
+			"import React from 'react';",
+			"import { Story, Meta } from '@storybook/react/types-6-0';\n",
+			"import AtomicContainer, { bgType } from './AtomicContainer'\n",
+			"import ${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/}, { ${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/}Props } from '$0';\n",
+			"export default {",
+			"\ttitle: '${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/}',",
+			"\tcomponent: ${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/}",
+			"} as Meta;\n",
+			"type TemplateArgsType = ${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/}Props & {containerBg?: bgType}\n",
+			"const Template: Story<TemplateArgsType> = args => (",
+			"\t<AtomicContainer background={args.containerBg}>",
+			"\t\t<${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/} {...args}></${TM_FILENAME/^([^.]+).*/${1:/pascalcase}/}>",
+			"\t</AtomicContainer>",
+			")\n",
+			"export const Default = Template.bind({});",
+			"Default.args = {\n",
+			"} as TemplateArgsType\n",
+		],
+		"description": "Default storybook story base"
+	},
+	"JSX Condition": {
+		"scope": "typescriptreact",
+		"prefix": "jxc",
+		"body": [
+			"{",
+			"\t$1 &&",
+			"\t$0",
+			"}"
+		],
+		"description": "JSX Condition base"
+	},
+	"Styled-components Condition": {
+		"scope": "source.css.styled, css",
+		"prefix": "scc",
+		"body": [
+			"${p => p.$1 ? `\n\t$2",
+        	"` : ''}"
+		],
+		"description": "Styled-components Condition"
+	}
+}
