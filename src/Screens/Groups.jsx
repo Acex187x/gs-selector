@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import Button from '../Atoms/Button'
 import Student from '../Components/Student'
 import _ from 'lodash'
-import { randomiseArray } from '../core'
+import { getClassColorSchema, randomiseArray } from '../core'
 import Text from '../Atoms/Text'
+import { useParams } from 'react-router'
 
 const modesColumn = { // connection of group mode and grid-template-columns in groups 
     S2: '1',
@@ -18,8 +19,8 @@ const modesColumn = { // connection of group mode and grid-template-columns in g
 }
 
 const groupsName = [
-    ["Smažene","Šileny","Půvabny","Neuralní", "Armadní","Skvěly", "Mystický", "Červené", "Zkušení"],
-    ["pražaky","špeky","krevety","policisté","kočky","psy", "kouzelníky", "mikrovlnky", "komunistove"],
+    ["Smažené","Šílení","Půvabní","Neurální", "Armadní","Skvělí", "Mystičtí", "Červené", "Zkušené"],
+    ["pražaky","špeky","krevety","policisté","kočky","psi", "kouzelníky", "mikrovlnky", "komunisté"],
 ]
 
 const randomName = () => groupsName.map(el => el[~~(el.length * Math.random())]).join(' ')
@@ -29,6 +30,8 @@ export default function Groups(props) {
     const { style, students } = props
     const [groups, setGroups] = useState([]);
     const [mode, setMode] = useState('S2');
+    const [names, setNames] = useState([]);
+    const params = useParams()
 
     const generateNewGroups = (mode) => { // mode<string> mode[0]<'S' | 'T'> (students or team) mode[1]<number>
         setMode(mode);
@@ -40,12 +43,12 @@ export default function Groups(props) {
             setGroups(chunked)
         } else if (mode[0] === 'T') {
             let chunked = _.chunk(randomiseArray(students), parseInt(~~(students.length / parseInt(mode.slice(1)))))
-            console.log(chunked.length, parseInt(mode.slice(1)))
             if (chunked.length > parseInt(mode.slice(1))) {
                 chunked = [..._.dropRight(chunked, 2), [..._.last(_.dropRight(chunked, 1)), ..._.last(chunked)]]
             }
             setGroups(chunked)
         }
+        setNames(Array(20).fill('').map(el => randomName()))
     }
 
     useEffect(() => {
@@ -61,7 +64,7 @@ export default function Groups(props) {
             <GroupsContainer>
                 {
                     groups.map((el, key) => (
-                        <Group name={randomName()} key={key} cols={modesColumn[mode]}>
+                        <Group name={names[key]} key={key} cols={modesColumn[mode]} bg={getClassColorSchema(params.classname).bg}>
                             {
                                 el.map((s, i) => (
                                     <GroupElement>
@@ -75,14 +78,14 @@ export default function Groups(props) {
                 }
             </GroupsContainer>
             <Buttons>
-                <Button onClick={handleButton} id="S2" ph={'1rem'}>2 students</Button>
-                <Button onClick={handleButton} id="S3" ph={'1rem'}>3 students</Button>
-                <Button onClick={handleButton} id="S4" ph={'1rem'}>4 students</Button>
-                <Button onClick={handleButton} id="S5" ph={'1rem'}>5 students</Button>
-                <Button onClick={handleButton} id="S6" ph={'1rem'}>6 students</Button>
-                <Button onClick={handleButton} id="T2" ph={'1rem'}>2 teams</Button>
-                <Button onClick={handleButton} id="T3" ph={'1rem'}>3 teams</Button>
-                <Button onClick={handleButton} id="T4" ph={'1rem'}>4 teams</Button>
+                <Button onClick={handleButton} id="S2" ph={'1rem'}>2 studenti</Button>
+                <Button onClick={handleButton} id="S3" ph={'1rem'}>3 studenti</Button>
+                <Button onClick={handleButton} id="S4" ph={'1rem'}>4 studenti</Button>
+                <Button onClick={handleButton} id="S5" ph={'1rem'}>5 studentů</Button>
+                <Button onClick={handleButton} id="S6" ph={'1rem'}>6 studentů</Button>
+                <Button onClick={handleButton} id="T2" ph={'1rem'}>2 skupiny</Button>
+                <Button onClick={handleButton} id="T3" ph={'1rem'}>3 skupiny</Button>
+                <Button onClick={handleButton} id="T4" ph={'1rem'}>4 skupiny</Button>
             </Buttons>
         </StyledGroups>
     )
@@ -118,12 +121,12 @@ const Group = styled.div`
     position: relative;
     &&::before {
         content: '${p => p.name}';
-        font-size: .6rem;
+        font-size: .8rem;
         font-family: 'Poppins';
         font-weight: 300;
-        background-color: #c3fcd1;
+        background-color: ${p => p.bg};
         position: absolute;
-        top: -0.5rem;
+        top: -0.65rem;
         left: 1rem;
     }
 

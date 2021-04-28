@@ -15,6 +15,8 @@ export default function SelectRandom(props) {
 
     useEffect(() => {
         setLeftGroup(students);
+        setRightGroup([]);
+        setCurrentStudent(null);
     }, [])
 
     const handleButton = () => {
@@ -33,24 +35,43 @@ export default function SelectRandom(props) {
         setCurrentStudent(selectedStudent)
     }
 
+    const reverseGroup = (name) => {
+        if (leftGroup.find(n => n === name)) {
+            setLeftGroup(leftGroup.filter(n => n !== name))  
+            setRightGroup([...rightGroup, name])
+        } else {
+            setRightGroup(rightGroup.filter(n => n !== name))
+            setLeftGroup([...leftGroup, name])
+        }
+    }
+
+    const returnCurrent = () => {
+        if (!currentStudent) return;
+        const setFromGroup = [setLeftGroup, setRightGroup][direction];
+        const fromGroup = [leftGroup, rightGroup][direction];
+
+        setFromGroup([...fromGroup, currentStudent])
+        setCurrentStudent(null)
+    }
+
     return (
         <StyledSelectRandom style={style}>
             <StudentTable>
                 {
                     leftGroup.map((student_, i) => (
-                        <Student scale={0.7} key={student_ + 'r'}>{student_}</Student>
+                        <Student scale={0.7} key={student_ + 'r'} onClick={() => reverseGroup(student_)}>{student_}</Student>
                     ))
                 }
             </StudentTable>
             <Control>
                 <Title>Odpovída teď:</Title>
-                <Student style={!currentStudent ? {opacity: 0} : {}}>{currentStudent}</Student>
+                <Student style={!currentStudent ? {opacity: 0} : {}} onClick={returnCurrent}>{currentStudent}</Student>
                 <Button ph={'3rem'} onClick={handleButton}>Dalsí</Button>
             </Control>
             <StudentTable>
                 {
                     rightGroup.map((student_, i) => (
-                        <Student scale={0.7} key={student_ + 'l'}>{student_}</Student>
+                        <Student scale={0.7} key={student_ + 'l'} onClick={() => reverseGroup(student_)}>{student_}</Student>
                     ))
                 }
             </StudentTable>

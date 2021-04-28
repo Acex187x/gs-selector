@@ -25,23 +25,24 @@ export default function List(props) {
                     list.map((s, i) => (
                         <ListElement>
                             <Text style={{marginRight: '1rem'}}>{i + 1}.</Text>
-                            <Student>{s}</Student>
+                            <Student scale={0.8}>{s}</Student>
                         </ListElement>
                     ))
                 }
             </ListBody>
             <Control>
-                <Button onClick={handleButton}>Generate</Button>
+                <Button onClick={handleButton}>Vybrat</Button>
             </Control>
         </StyledList>
     )
 }
 
 const StyledList = styled.div`
-    height: 60%;
+    height: 70%;
     position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
 `
 
 const Control = styled.div`
@@ -62,5 +63,5 @@ const ListBody = styled.div`
 const ListElement = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 `

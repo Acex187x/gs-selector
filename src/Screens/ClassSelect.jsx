@@ -1,15 +1,63 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import Title from '../Atoms/Title'
 import ClassCard from '../Components/ClassCard'
-import { getClasses } from '../core'
+import { getClasses, newClass } from '../core'
 
 export default function ClassSelect() {
     const history = useHistory()
-    
-    const classes = getClasses()
-    console.log(classes);
+    let classes;
+    try {
+        classes = JSON.parse(localStorage.getItem('classes')) || [];
+    } catch(err) {
+        classes = [];
+    }
+
+    if (!classes.find(el => el.name === 'B1')) {
+        newClass("B1", [
+            "Asadov Eldar",
+            "Bilytskyi Oleksii",
+            "Buliienko Sofiia",
+            "Harnaha Veronika",
+            "Kostygova Ekaterina",
+            "Liaposhchenko Kateryna",
+            "Lyamkin Alexander",
+            "Molchanova Marharyta",
+            "Movchan Daria",
+            "Popadenko Nazar",
+            "Riabukha Oleksandra",
+            "Seleznova Daria",
+            "Shekhovtsov Ivan",
+            "Shlykov Heorhii",
+            "Stytsiura Varvara",
+            "Tkachenko Hleb",
+            "Voronenko Mariia"
+        ])
+        classes = JSON.parse(localStorage.getItem('classes'))
+    }
+
+    if (!classes.find(el => el.name === 'B2')) {
+        newClass("B2", [
+            "Abramov Dmitriy",
+            "Afanasov Valerii",
+            "Alibaeva Akdaana",
+            "Boichenko Kseniia",
+            "Ivanov Vladyslav",
+            "Kharitonov Nikita",
+            "Lietin Anatolii",
+            "Maksimov Oleksandr",
+            "Nurmamatov Argen",
+            "Polishchuk Kateryna",
+            "Sagadatov Konstantin",
+            "Sakal Vasyl",
+            "Saparalieva Dayana",
+            "Sasi Mykyta",
+            "Sorokin Andrii",
+            "Zabolotnyi Illia"
+        ])
+        classes = JSON.parse(localStorage.getItem('classes'))
+    }
 
     return (
         <Wrapper>
@@ -20,7 +68,7 @@ export default function ClassSelect() {
                         <ClassCard 
                             onClick={() => history.push(`/classroom/${class_.name}`)}
                             name={class_.name}
-                            count={class_.studentList.length + ' students'}
+                            count={class_.studentList.length + ' 🙋'}
                         />
                     ))
                 }

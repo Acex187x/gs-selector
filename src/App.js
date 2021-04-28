@@ -16,15 +16,17 @@ function App() {
         <Switch>
           <Route exact path='/'>
             <ClassSelect />
+            <Footer />
           </Route>
           <Route exact path='/new-class'>
             <NewClass />
+            <Footer />
           </Route>
           <Route exact path='/classroom/:classname'>
             <ClassRoom />
+            <Footer />
           </Route>
         </Switch>
-        <Footer />
       </Router>
     </StyledApp>
   );

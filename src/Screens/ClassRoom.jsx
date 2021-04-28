@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import styled from 'styled-components'
 import Title from '../Atoms/Title'
 import BottomTabNav from '../Components/BottomTabNav'
-import { getStudentsOfClass } from '../core'
+import { getClassColorSchema, getStudentsOfClass } from '../core'
 import Connections from './Connections'
 import Groups from './Groups'
 import SelectRandom from './SelectRandom'
@@ -27,17 +27,16 @@ export default function ClassRoom(props) {
     const students = getStudentsOfClass(params.classname)
 
     const handleSelect = (s) => {
-        console.log('a');
         setScreen(s)
         setIsAnimating(true)
         setTimeout(() => setIsAnimating(false), 500)
     }
 
     return (
-        <StyledClassRoom style={style}>
-            <Title size={'2rem'} mb={'2rem'} center>Skupína {params.classname}</Title>
+        <StyledClassRoom style={style} bg={getClassColorSchema(params.classname).bg}>
+            <Title size={'2rem'} mb={'2rem'} center>Skupina {params.classname}</Title>
             <Back>
-                <Link to={'/'}><Text center size={'.8rem'}>Back</Text></Link>
+                <Link to={'/'}><Text center size={'.8rem'}>Zpět na výběr tříd</Text></Link>
             </Back>
             <ScreenSwiper page={pages[screen]} isAnimating={isAnimating}>
                 {
@@ -76,7 +75,7 @@ export default function ClassRoom(props) {
 
 const StyledClassRoom = styled.div`
     height: calc(100% - 4rem);
-    background-color: #c3fcd1;
+    background-color: ${p => p.bg};
     display: flex;
     flex-direction: column;
     padding: 2rem;
@@ -94,15 +93,15 @@ const ScreenSwiper = styled.div`
     top: 0;
     left: 0;
     transform: translateY(-${p => p.page * 100}vh);
-    padding-top: calc(${p => p.isAnimating ? 0 : p.page * 100}vh + ${p => p.page * 1.5}rem);
+    padding-top: calc(${p => p.isAnimating ? 0 : p.page * 100}vh + ${p => p.page * 0}rem);
     /* display: flex; */
 `
 
 const SwiperScreenContainer = styled.div`
     width: calc(100vw - 4rem);
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 8rem);
     padding: 2rem;
-    padding-top: 4rem;
+    padding-top: 6rem;
 `
 
 const Back = styled.div`

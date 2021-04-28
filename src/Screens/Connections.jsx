@@ -4,9 +4,6 @@ import Student from '../Components/Student'
 import arrowDown from '../assets/down-arrow.svg'
 import Button from '../Atoms/Button'
 import ReactDOMServer from 'react-dom/server'
-import reactDom from 'react-dom'
-
-
 
 export default function Connections(props) {
 
@@ -29,10 +26,10 @@ export default function Connections(props) {
         [...document.getElementsByClassName('arrow')].forEach(el => el.remove())
         const connections = [...document.getElementsByClassName('connection')]
         connections.forEach((connection, i) => {
-            const arrow = document.createElement('div');
-            arrow.classList.add('arrow')
-            arrow.innerHTML = ReactDOMServer.renderToStaticMarkup(<Arrow className="arrow" src={arrowDown} />)
-            connection.appendChild(arrow)
+            // const arrow = document.createElement('div');
+            // arrow.classList.add('arrow')
+            // arrow.innerHTML = ReactDOMServer.renderToStaticMarkup(<Arrow className="arrow" src={arrowDown} />)
+            // connection.appendChild(arrow)
 
             if (!connections[i - 1]) return;
 
@@ -47,7 +44,7 @@ export default function Connections(props) {
     }, [connections])
 
     useEffect(() => {
-        setTimeout(handleButton, 1500)
+        handleButton()
     }, [])
 
     return (
@@ -57,13 +54,13 @@ export default function Connections(props) {
                     connections.map(con => (
                         <Connection className={'connection'}>
                             <Student scale={.9}>{con}</Student>
-                            {/* <Arrow src={arrowDown} /> */}
+                            <Arrow src={arrowDown} />
                         </Connection>
                     ))
                 }
             </Grid>
             <Control>
-                <Button onClick={handleButton}>Select</Button>
+                <Button onClick={handleButton}>Vybrat</Button>
             </Control>
         </StyledConnections>
     )
@@ -97,7 +94,7 @@ const Connection = styled.div`
     justify-content: flex-start;
     margin-bottom: 1rem;
 
-    &&:last-child > div:last-child > img {
+    &&:last-child > img {
         opacity: 0;
     }
 `

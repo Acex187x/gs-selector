@@ -49,7 +49,6 @@ export default function NewClass(props) {
     }
 
     const studentDelete = (student) => {
-        console.log(students.join(','), students)
         const newStudents = students.filter(s => s !== student)
         if (newStudents[0] === '' && newStudents.length === 1) {
             setStudents([])
@@ -59,10 +58,9 @@ export default function NewClass(props) {
     }
 
     const handleButtonClick = (e) => {
-        console.log(e.target.id )
         if (e.target.id === 'back') return history.push('/');
-        if (classInputValue.length <= 0) { alert('Enter name of the class'); return; }
-        if (students.length <= 1) { alert('Add at least 2 students'); return; }
+        if (classInputValue.length <= 0) { alert('Přidejte nazev třidy'); return; }
+        if (students.length <= 1) { alert('Přidejte alespoň 2 studenty'); return; }
         newClass(classInputValue, students)
         history.push('/')
     }
@@ -70,8 +68,8 @@ export default function NewClass(props) {
     return (
         <StyledNewClass style={style}>
             <Container>
-                <Input value={classInputValue} onChange={handleInput} id="class" placeholder={'New class name'}/>
-                <Title>Students: (up to 20)</Title>
+                <Input value={classInputValue} onChange={handleInput} id="class" placeholder={'Nazev nové třidy'}/>
+                <Title>Studenty: (max. 20)</Title>
                 <StudentList>
                     {
                         students && students.map(student => (
@@ -80,15 +78,15 @@ export default function NewClass(props) {
                     }
                     {
                         !students.length && (
-                            <Student>Here will be students</Student>
+                            <Student>Tady budou studenty</Student>
                         )
                     }
                 </StudentList>
-                <Input value={studentInputValue} onChange={handleInput} id="student" onKeyPress={handleStudentInputKeyPress} placeholder={'Add student'}/>
-                <Text size={'.8rem'} style={{marginTop: 0}}>Hit <kbd>Enter</kbd> to add, you can add more than 1 student by spliting them with comma ( , )</Text>
+                <Input value={studentInputValue} onChange={handleInput} id="student" onKeyPress={handleStudentInputKeyPress} placeholder={'Přidat studenta'}/>
+                <Text size={'.8rem'} style={{marginTop: 0}}>Zmačknete <kbd>Enter</kbd> abych přidat, můžete přidat více něž jednoho studenta rozdělením čárkou ( , )</Text>
                 <div>
-                    <Button onClick={handleButtonClick} color={'blue'} id="back">Back</Button>
-                    <Button onClick={handleButtonClick} style={{marginLeft: '1rem'}}>Create</Button>
+                    <Button onClick={handleButtonClick} color={'blue'} id="back">Zpět</Button>
+                    <Button onClick={handleButtonClick} style={{marginLeft: '1rem'}}>Vytvořit</Button>
                 </div>
             </Container>
         </StyledNewClass>

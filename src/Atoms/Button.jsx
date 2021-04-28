@@ -1,12 +1,17 @@
 import React from 'react'
+import { useParams } from 'react-router'
 import styled from 'styled-components'
+import { getClassColorSchema } from '../core'
 import Title from './Title'
 
-// P.S. ph === padding horizontal
+// ph === padding horizontal
 
 export default function Button(props) {
 
-    const { style, children, color, ph, onClick, id } = props
+    const { style, children, ph, onClick, id } = props
+    const params = useParams()
+
+    const color = params.classname ? getClassColorSchema(params.classname).accent || props.color : props.color
 
     return (
         <StyledButton style={style} ph={ph} color={color} onClick={onClick} id={id}>

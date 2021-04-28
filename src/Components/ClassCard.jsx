@@ -2,13 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 import Text from '../Atoms/Text'
 import Title from '../Atoms/Title'
+import { getClassColorSchema } from '../core'
 
 export default function ClassCard(props) {
 
     const { style, name, count, plus, onClick } = props
 
+    const color = getClassColorSchema(name) || 'white';
+
     return (
-        <StyledClassCard style={style} plus={plus} onClick={onClick}>
+        <StyledClassCard style={style} plus={plus} onClick={onClick} color={color.selectorCard}>
             {
                 plus ? (
                     <Title center size={'3rem'}>+</Title>
@@ -26,7 +29,7 @@ const StyledClassCard = styled.div`
     min-height: 4rem;
     border-radius: 1rem;
     padding: 1rem;
-    background-color: #75EE6A;
+    background-color: ${p => p.color};
     box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;

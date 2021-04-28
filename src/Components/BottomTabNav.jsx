@@ -25,15 +25,15 @@ export default function BottomTabNav(props) {
             </Tab>
             <Tab onClick={() => setSelected('connections')}>
                 <TabImage src={connections} selected={selected === 'connections'}/>
-                <Text>Connections</Text>
+                <Text>Vztahy</Text>
             </Tab>
             <Tab onClick={() => setSelected('groups')}>
                 <TabImage src={groups} selected={selected === 'groups'}/>
-                <Text>Groups</Text>
+                <Text>Skupiny</Text>
             </Tab>
             <Tab onClick={() => setSelected('list')}>
                 <TabImage src={list} selected={selected === 'list'}/>
-                <Text>List</Text>
+                <Text>Seznam</Text>
             </Tab>
         </StyledBottomTabNav>
     )
@@ -46,6 +46,11 @@ const StyledBottomTabNav = styled.div`
     position: fixed;
     bottom: 2rem;
     margin-bottom: 5vh;
+    transition: opacity .4s;
+    opacity: .4;
+    &&:hover {
+        opacity: 1;
+    }
 `
 
 const Tab = styled.div`
@@ -55,6 +60,7 @@ const Tab = styled.div`
     margin-right: 2rem;
     cursor: pointer;
     user-select: none;
+    min-width: 5rem;
 
     &&:hover > img {
         filter: unset;
