@@ -17,7 +17,7 @@ export default function SelectRandom(props) {
         setLeftGroup(students);
         setRightGroup([]);
         setCurrentStudent(null);
-    }, [])
+    }, [students])
 
     const handleButton = () => {
         if ([leftGroup, rightGroup][direction].length <= 0) { // change direction when the list is empty
@@ -53,6 +53,7 @@ export default function SelectRandom(props) {
         setFromGroup([...fromGroup, currentStudent])
         setCurrentStudent(null)
     }
+
 
     return (
         <StyledSelectRandom style={style}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Button from '../Atoms/Button'
 import Student from '../Components/Student'
@@ -36,6 +36,56 @@ export default function Groups(props) {
     const [names, setNames] = useState([]);
     const params = useParams()
 
+    const [currentDraggedStudent, setCurrentDraggedStudent] = useState(null)
+    const mouseDragStartCoords = useRef({y: 0, x: 0})
+
+    const handleStudentDrag = (name, e) => {
+        setCurrentDraggedStudent(name);
+        mouseDragStartCoords.current = { x: e.clientX, y: e.clientY }
+    }
+
+    const mouseMove = (e) => {
+        if (currentDraggedStudent && document.getElementById('dragged')) {
+            document.getElementById('dragged').style.transition = 'unset';
+            document.getElementById('dragged').style.zIndex = '100';
+            document.getElementById('dragged').style.transform = [
+                `scale(.95)`,
+                `translateY(${e.clientY - mouseDragStartCoords.current.y}px)`,
+                `translateX(${e.clientX - mouseDragStartCoords.current.x}px)`
+            ].join(' ')
+        }
+    }
+
+    const mouseUp = (e) => {
+        if (currentDraggedStudent && document.getElementById('dragged')) {
+            document.getElementById('dragged').style.transform = '';
+            document.getElementById('dragged').style.zIndex = '';
+            const [x, y] = [e.clientX, e.clientY];
+            [...document.getElementsByClassName('group')].forEach((el) => {
+                const b = el.getBoundingClientRect();
+                if (
+                    x > b.x && x < b.x + b.width &&
+                    y > b.y && y < b.y + b.height
+                ) {
+                    parseInt(el.id.replace('group', ''))
+                    setGroups(groups.map((group, i) => {
+                        if (i === parseInt(el.id.replace('group', ''))) {
+                            if (!group.find(s => s === currentDraggedStudent)) {
+                                group.push(currentDraggedStudent)
+                            }
+                        } else {
+                            if (group.find(s => s === currentDraggedStudent)) {
+                                group = group.filter(s => s !== currentDraggedStudent)
+                            }
+                        }
+                        return group;
+                    }))
+                }
+            })
+            setCurrentDraggedStudent(null);
+        }
+    }
+
     const generateNewGroups = (mode) => { // mode<string> mode[0]<'S' | 'T'> (students or team) mode[1]<number>
         setMode(mode);
         if (mode[0] === 'S') {
@@ -57,8 +107,24 @@ export default function Groups(props) {
     }
 
     useEffect(() => {
+        document.addEventListener('mousemove', mouseMove)
+        document.addEventListener('mouseup', mouseUp)
+
+        return () => {
+            document.removeEventListener('mousemove', mouseMove)
+            document.removeEventListener('mouseup', mouseUp)
+        }
+    }, [currentDraggedStudent])
+
+    useEffect(() => {
         generateNewGroups('S2')
     }, [])
+
+    useEffect(() => {
+        if (groups.find(g => g.length <= 0)) {
+            setGroups(groups.filter(g => g.length > 0))
+        }
+    }, [groups])
 
     const handleButton = e => {
         generateNewGroups(e.target.id)
@@ -69,12 +135,24 @@ export default function Groups(props) {
             <GroupsContainer>
                 {
                     groups.map((el, key) => (
-                        <Group name={names[key]} key={key} cols={modesColumn[mode]} bg={getClassColorSchema(params.classname).bg}>
+                        <Group name={names[key]} key={key} cols={modesColumn[mode]} bg={getClassColorSchema(params.classname).bg} className='group' id={`group${key}`}>
                             {
                                 el.map((s, i) => (
-                                    <GroupElement>
+                                    <GroupElement key={i}>
                                         <Text style={{marginRight: '1rem'}}>{i + 1}.</Text> 
-                                        <Student scale={0.8}>{s}</Student>
+                                        {
+                                            currentDraggedStudent === s
+                                            ? <Student 
+                                                scale={0.8}
+                                                id='dragged'
+                                                grabbing
+                                            >{s}</Student>
+                                            : <Student 
+                                                grab
+                                                scale={0.8} 
+                                                onMouseDown={(e) => handleStudentDrag(s, e)}
+                                            >{s}</Student>
+                                        }
                                     </GroupElement>
                                 ))
                             }
@@ -118,8 +196,7 @@ const Group = styled.div`
     grid-gap: 1rem;
     padding: 1rem;
     margin: 1rem;
-    
-
+    align-content: flex-start;
     border-radius: 1rem;
     border: 1px solid black;
 

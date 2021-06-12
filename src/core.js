@@ -59,6 +59,28 @@ export function newClass(name, studentList) {
     ]))
 }
 
+export function deleteClass(name) {
+
+    const inp = prompt(`Jste si jisti, že chcete odstranit třídu ${name}? Pokud souhlasíte, napište "ano"`)
+    if (inp && inp.toLowerCase() !== 'ano') return;
+
+    let currentClasses;
+    try {
+        currentClasses = JSON.parse(storage.getItem('classes'))
+    } catch (err) {
+        currentClasses = [];
+    }
+
+    if (!Array.isArray(currentClasses)) {
+        currentClasses = [];
+    }
+
+    storage.setItem('classes', JSON.stringify(
+        currentClasses.filter(c => c.name !== name)
+    ))
+    document.location.reload() 
+}
+
 export function getClasses() {
     let currentClasses;
     try {

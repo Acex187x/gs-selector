@@ -38,19 +38,20 @@ export default function List(props) {
 }
 
 const StyledList = styled.div`
-    height: 70%;
+    height: 100%;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 `
 
 const Control = styled.div`
-    position: absolute;
-    bottom: -4rem;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     width: 100%;
+    height: 12rem;
 `
 
 const ListBody = styled.div`
@@ -58,6 +59,8 @@ const ListBody = styled.div`
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1rem;
     min-width: 50rem;
+    flex: 1;
+    align-content: center;
 `
 
 const ListElement = styled.div`

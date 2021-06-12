@@ -5,15 +5,15 @@ import Student from '../Components/Student'
 
 export default function Missing(props) {
 
-    const { style, students, onSelect, missingList } = props
+    const { style, onSelect, allStudents, currentStudents } = props
 
     return (
         <StyledMissing style={style}>
             <Title size='3rem'>Kdo ještě spí?</Title>
             <Students>
                 {
-                    students.map(s => (
-                        <Student scale='.8' onClick={() => onSelect(s)} sleeping={missingList.find(ss => ss === s)}>{s}</Student>
+                    allStudents.map(s => (
+                        <Student scale='.8' onClick={() => onSelect(s)} sleeping={!currentStudents.find(ss => ss === s)}>{s}</Student>
                     ))
                 }
             </Students>
@@ -25,7 +25,7 @@ const StyledMissing = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
     height: 65%;
 `
 

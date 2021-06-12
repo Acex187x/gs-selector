@@ -2,16 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import Text from '../Atoms/Text'
 import Title from '../Atoms/Title'
-import { getClassColorSchema } from '../core'
+import { getClassColorSchema, deleteClass } from '../core';
+import deleteIcon from '../assets/minus.svg'
 
 export default function ClassCard(props) {
 
-    const { style, name, count, plus, onClick } = props
+    const { style, name, count, plus, onClick, editing } = props
 
     const color = getClassColorSchema(name) || 'white';
 
     return (
-        <StyledClassCard style={style} plus={plus} onClick={onClick} color={color.bg}>
+        <StyledClassCard style={style} plus={plus} onClick={!editing && onClick} color={color.bg} editing={editing}>
             {
                 plus ? (
                     <Title center size={'3rem'}>+</Title>
@@ -19,6 +20,9 @@ export default function ClassCard(props) {
                     <Title center size={'1.5rem'}>{name}</Title>
                     <Text center>{count}</Text>
                 </>)
+            }
+            {
+                !plus && editing && <RemoveButton onClick={() => deleteClass(name)}></RemoveButton>
             }
         </StyledClassCard>
     )
@@ -36,18 +40,43 @@ const StyledClassCard = styled.div`
     justify-content: center;
     align-content: center;
     cursor: pointer;
+    position: relative;
 
     transition: transform .2s;
+    ${p => !p.editing ? `
+        &&:hover {
+            transform: scale(1.03);
+        }
 
+        &&:active {
+            transform: scale(.97);
+        }
+    ` : ''}
+
+    ${p => p.plus ? `
+        background: white;
+    ` : ''}
+`
+
+const RemoveButton = styled.div`
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 2rem;
+    background-image: url(${deleteIcon});
+    background-repeat: no-repeat;
+    background-size: 1.5rem;
+    background-position: center center;
+
+    position: absolute;
+    right: -.5rem;
+    top: -.5rem;
+
+    transition: transform .2s;
     &&:hover {
-        transform: scale(1.03);
+        transform: scale(1.2);
     }
 
     &&:active {
         transform: scale(.97);
     }
-
-    ${p => p.plus ? `
-        background: white;
-    ` : ''}
 `

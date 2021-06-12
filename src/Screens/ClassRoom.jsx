@@ -11,23 +11,26 @@ import Missing from './Missing'
 import List from './List'
 import { Link } from 'react-router-dom'
 import Text from '../Atoms/Text'
+import Button from '../Atoms/Button'
 
 const pages = {
-    'missing': 0,
-    'random': 1,
-    'connections': 2,
-    'groups': 3,
-    'list': 4,
+    'random': 0,
+    'connections': 1,
+    'groups': 2,
+    'list': 3,
 }
 
 export default function ClassRoom(props) {
 
     const { style } = props
-    const [screen, setScreen] = useState('missing')
+    const [screen, setScreen] = useState('random')
     const [isAnimating, setIsAnimating] = useState(false);
     const params = useParams()
+    const [students, setStudents] = useState(getStudentsOfClass(params.classname));
     const [sleepingStudents, setSleepingStudents] = useState([]);
-    const students = getStudentsOfClass(params.classname).filter(s => !~sleepingStudents.indexOf(s))
+    // const students = getStudentsOfClass(params.classname).filter(s => !~sleepingStudents.indexOf(s))
+    const [isMissingOpen, setMissingOpen] = useState(false)
+    const [isMissingOpacity, setMissingOpenOpacity] = useState(false)
 
     const handleSelect = (s) => {
         setScreen(s)
@@ -36,12 +39,27 @@ export default function ClassRoom(props) {
     }
 
     const handleMissing = (s) => {
-        if (sleepingStudents.find(ss => ss === s)) { // remove (sleeping = > !sleeping)
-            setSleepingStudents(sleepingStudents.filter(ss => ss !== s))
-        } else { // add (!sleeping => sleeping)
-            if (students.length - sleepingStudents.length <= 1) return;
-            setSleepingStudents([...sleepingStudents, s])
+        if (students.find(ss => ss === s)) { 
+            console.log(getStudentsOfClass(params.classname).length, students.length)
+            if (students.length <= 2) return;
+            setStudents(students.filter(ss => ss !== s))
+        } else { 
+            setStudents([...students, s])
         }
+    }
+
+    const openMissing = () => {
+        setMissingOpen(true);
+        setTimeout(() => {
+            setMissingOpenOpacity(true);
+        }, 0)
+    }
+
+    const closeMissing = () => {
+        setMissingOpenOpacity(false);
+        setTimeout(() => {
+            setMissingOpen(false); 
+        }, 200)
     }
 
     return (
@@ -49,16 +67,9 @@ export default function ClassRoom(props) {
             <Header>
                 <Link to={'/'}><Text center size={'.8rem'}>Zpět na výběr tříd</Text></Link>
                 <Title size={'2rem'} mb={'2rem'} center>Skupina {params.classname}</Title>
-                <a href="#" onClick={() => handleSelect('missing')} style={{display: 'flex', justifyContent: 'flex-end'}}><Text center size={'.8rem'}>Vybrat chybějící studenty</Text></a>
+                <a href="#" onClick={openMissing} style={{display: 'flex', justifyContent: 'flex-end'}}><Text center size={'.8rem'}>Vybrat chybějící studenty</Text></a>
             </Header>
             <ScreenSwiper page={pages[screen]} isAnimating={isAnimating}>
-                {
-                    (screen === 'missing' || isAnimating) && (
-                        <SwiperScreenContainer>
-                            <Missing onSelect={handleMissing} students={getStudentsOfClass(params.classname)} missingList={sleepingStudents} />
-                        </SwiperScreenContainer>
-                    )
-                }
                 {
                     (screen === 'random' || isAnimating) && (
                         <SwiperScreenContainer>
@@ -89,6 +100,14 @@ export default function ClassRoom(props) {
                 }
             </ScreenSwiper>
             <BottomTabNav screen={screen} onSelect={handleSelect} />
+            {
+                isMissingOpen && (
+                    <MissingContainer bg={getClassColorSchema(params.classname).bg} isOpen={isMissingOpacity}>
+                        <Missing onSelect={handleMissing} allStudents={getStudentsOfClass(params.classname)} currentStudents={students} />
+                        <Button onClick={closeMissing} style={{marginTop: '4rem'}}>Hotovo</Button>
+                    </MissingContainer>
+                )
+            }
         </StyledClassRoom>
     )
 }
@@ -139,4 +158,26 @@ const Header = styled.div`
     && > * {
         flex: 1;
     }
+`
+
+const MissingContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 5rem);
+    padding-bottom: 2rem;
+    background-color: ${p => p.bg};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+
+    transition: .2s opacity;
+    ${p => p.isOpen ? `
+        opacity: 1;
+    ` : `
+        opacity: 0;
+    `}
 `

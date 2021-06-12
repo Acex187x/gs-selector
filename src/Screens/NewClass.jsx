@@ -43,6 +43,7 @@ export default function NewClass(props) {
     const handleButtonClick = (e) => {
         if (classInputValue.length <= 0) { alert('Přidejte nazev třidy'); return; }
         if (students.length <= 1) { alert('Přidejte alespoň 2 studenty'); return; }
+        if ([...new Set(students)].length !== students.length) { alert('Jmena se nemusí opakovat'); return; }
         newClass(classInputValue, students)
         history.push('/')
     }
@@ -50,12 +51,14 @@ export default function NewClass(props) {
     const [studentsInput, setStudentsInput] = useState('');
     const [students, setStudents] = useState([]);
     const handleContentEdit = e => {
-        const text = makeFirstLetterCapital(e.nativeEvent.target.innerText)
+        const text = e.nativeEvent.target.innerText.replaceAll('\n', '')
+        console.log(text);
+
         setStudentsInput(text
             .split(',')
             // .map((el, i) => el.trim().length > 0 ? `<span class="student">${el.trim()}</span>` : '')
             .map((el, i) => el.trim().length > 0 ? 
-                renderToString(<Student scale='.8'>{el.trim()}</Student>)
+                renderToString(<Student scale='.8'>{makeFirstLetterCapital(el)}</Student>)
             : '')
             .slice(0, 20)
             .join(',')
@@ -69,13 +72,13 @@ export default function NewClass(props) {
         <StyledNewClass style={style}>
             <StudentStyle />
             <Container>
-                <BackHeader>
+                <BackHeader style={{marginBottom: '5rem'}}>
                     <Title size="2rem">Nova třida</Title>
                     <Back onClick={() => history.push('/')}/>
                 </BackHeader>
                 <ClassInput ref={nameInputRef} value={classInputValue} onChange={handleInput} id="class" placeholder={'Nazev nové třidy'}/>
-                <div>
-                    <Title>Studenty: (max. 20, oddělené čárkou)</Title>
+                <div style={{width: '100%', margin: '2rem 0 5rem 0'}}>
+                    <Title>Studenty: <span style={{color: '#757575', fontSize: '.7rem'}}>(max. 20, oddělené čárkou)</span></Title>
                     <StudentList>
                         <ContentEditable 
                             style={{width: '100%', height: '100%', outline: 0}}
@@ -111,7 +114,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-evenly;
+    justify-content: center;
     min-height: 60vh;
     min-width: 40vw;
 
@@ -150,7 +153,7 @@ const ClassInput = styled.input`
 
 const StudentList = styled.div`
     display: flex;
-    width: 100%;
+    min-width: calc(100% - 2rem);
     flex-wrap: wrap;
     justify-content: flex-start;
     outline: 0;

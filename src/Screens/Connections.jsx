@@ -108,6 +108,4 @@ const Control = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    position: absolute;
-    bottom: 13rem;
 `

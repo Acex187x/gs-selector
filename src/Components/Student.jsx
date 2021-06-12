@@ -29,7 +29,7 @@ const skinColorCombinations = [
 ]
 
 export default function Student(props) {
-    const { style, children, scale, onClick, sleeping } = props
+    const { style, children, scale, onClick, sleeping, onMouseDown, id, grabbing, grab } = props
     let tShortColor, hairColor, skinColor;
     if (children && typeof children === 'string') {
         tShortColor = tShortCombinations[getRandomNumberFromString(children, tShortCombinations.length, 0)]
@@ -63,7 +63,7 @@ export default function Student(props) {
     }
 
     return (
-        <StyledStudent style={style} scale={scale || 1} onClick={onClick} className="student" sleeping={sleeping}>
+        <StyledStudent style={style} scale={scale || 1} onClick={onClick} onMouseDown={onMouseDown} className="student" sleeping={sleeping} id={id} grabbing={grabbing} grab={grab}>
             {/* <Avatar src={man} scale={scale || 1} /> */}
             <svg id="Layer_1" enable-background="new 0 0 464.056 464.056" height={`${(scale || 1)  * 2.5}rem`} viewBox="0 0 464.056 464.056" width={`${(scale || 1) * 2.5}rem`}
                 xmlns="http://www.w3.org/2000/svg">
@@ -95,6 +95,14 @@ const StyledStudent = styled.div`
     z-index: 10;
     ${p => p.onClick ? `
         cursor: pointer; 
+    ` : ''}
+
+    ${p => p.grab ? `
+        cursor: grab; 
+    ` : ''}
+
+    ${p => p.grabbing ? `
+        cursor: grabbing; 
     ` : ''}
     
     && > span {
