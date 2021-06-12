@@ -73,7 +73,6 @@ const StyledConnections = styled.div`
     justify-content: center;
     min-height: 80%;
     margin: 0 5rem;
-    position: relative;
 `
 
 const Grid = styled.div`
@@ -110,5 +109,5 @@ const Control = styled.div`
     display: flex;
     justify-content: center;
     position: absolute;
-    bottom: 5rem;
+    bottom: 13rem;
 `

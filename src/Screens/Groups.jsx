@@ -18,9 +18,12 @@ const modesColumn = { // connection of group mode and grid-template-columns in g
     T4: '1'
 }
 
+// Smažení, Šílení, Půvabní, Neutrální? Armádní, Skvělí, Mystičtí, Červení, Zkušení - Pražáci, komunisté, policisté, psi, kouzelníci
+// Smažené, Šílené, Půvabné, Neutrální, Armádní, Skvělé, Mystické, Červené, Zkušené + špeky, krevety, kočky,
+
 const groupsName = [
     ["Smažené","Šílení","Půvabní","Neurální", "Armadní","Skvělí", "Mystičtí", "Červené", "Zkušené"],
-    ["pražaky","špeky","krevety","policisté","kočky","psi", "kouzelníky", "mikrovlnky", "komunisté"],
+    ["Pražáci","špeky","krevety","policisté","kočky","psi", "kouzelníci", "mikrovlnky", "komunisté"],
 ]
 
 const randomName = () => groupsName.map(el => el[~~(el.length * Math.random())]).join(' ')
@@ -37,12 +40,14 @@ export default function Groups(props) {
         setMode(mode);
         if (mode[0] === 'S') {
             let chunked = _.chunk(randomiseArray(students), parseInt(mode.slice(1)))
+            console.log(chunked, _.last(chunked))
             if (_.last(chunked).length === 1) {
                 chunked = [..._.dropRight(chunked, 2), [..._.last(_.dropRight(chunked, 1)), ..._.last(chunked)]]
             }
             setGroups(chunked)
         } else if (mode[0] === 'T') {
             let chunked = _.chunk(randomiseArray(students), parseInt(~~(students.length / parseInt(mode.slice(1)))))
+            console.log(chunked, _.last(chunked))
             if (chunked.length > parseInt(mode.slice(1))) {
                 chunked = [..._.dropRight(chunked, 2), [..._.last(_.dropRight(chunked, 1)), ..._.last(chunked)]]
             }

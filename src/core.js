@@ -3,34 +3,39 @@ const storage = window.localStorage
 
 const classesColorSchemas = [
     {
-        bg: '#c3dffc',
-        accent: '#459df9',
-        selectorCard: '#a3d0ff',
+        name: 'Ocean',
+        bg: '#82C4E0',
+        accent: '#6091A6',
     },
     {
-        bg: '#ebd5ff',
-        accent: '#b463fe',
-        selectorCard: '#e1c0ff',
+        name: 'Pastel',
+        bg: '#D9D9D9',
+        accent: '#D9B1A3',
     },
     {
-        bg: '#c3fcd1',
-        accent: '#28c74f',
-        selectorCard: '#68f68b',
+        name: 'Grass',
+        bg: '#D0FFC5',
+        accent: '#74CC61',
     },
     {
-        bg: '#acf2e2',
-        accent: '#00b78d',
-        selectorCard: '#58f6d2',
+        name: 'Winter',
+        bg: '#B0D1F4',
+        accent: '#609DDC',
     },
     {
-        bg: '#ffde92',
-        accent: '#bbb72c',
-        selectorCard: '#ffd679',
+        name: 'Desert',
+        bg: '#F2E18D',
+        accent: '#BF8654',
     },
     {
-        bg: '#ffd3e9',
-        accent: '#ff54b0',
-        selectorCard: '#ffbede',
+        name: 'Pinky',
+        bg: '#F3DEDB',
+        accent: '#A0BED9',
+    },
+    {
+        name: 'Candy',
+        bg: '#BAE8D7',
+        accent: '#F7487A',
     },
 ]
 
@@ -108,6 +113,6 @@ export function getRandomNumberFromString(str, maxNum, i = 0) {
 }
 
 export function getClassColorSchema(name) {
-    return classesColorSchemas[getRandomNumberFromString(name, 5, 3)];
+    return classesColorSchemas[getRandomNumberFromString(name, 6, 3)];
     // return classesColorSchemas[5];
 }

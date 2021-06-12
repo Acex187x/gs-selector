@@ -11,7 +11,7 @@ export default function ClassCard(props) {
     const color = getClassColorSchema(name) || 'white';
 
     return (
-        <StyledClassCard style={style} plus={plus} onClick={onClick} color={color.selectorCard}>
+        <StyledClassCard style={style} plus={plus} onClick={onClick} color={color.bg}>
             {
                 plus ? (
                     <Title center size={'3rem'}>+</Title>

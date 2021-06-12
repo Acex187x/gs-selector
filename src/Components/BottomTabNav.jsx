@@ -8,31 +8,31 @@ import Text from '../Atoms/Text'
 
 export default function BottomTabNav(props) {
 
-    const { style, onSelect } = props
-    const [selected, setSelected] = useState('random');
+    const { style, onSelect, screen } = props
+    // const [selected, setSelected] = useState('random');
 
-    useEffect(() => {
-        if (onSelect) {
-            onSelect(selected);
-        }
-    }, [selected])
+    // useEffect(() => {
+    //     if (onSelect) {
+    //         onSelect(selected);
+    //     }
+    // }, [selected])
 
     return (
         <StyledBottomTabNav style={style}>
-            <Tab onClick={() => setSelected('random')}>
-                <TabImage src={random} selected={selected === 'random'}/>
+            <Tab onClick={() => onSelect('random')}>
+                <TabImage src={random} selected={screen === 'random'}/>
                 <Text>Random</Text>
             </Tab>
-            <Tab onClick={() => setSelected('connections')}>
-                <TabImage src={connections} selected={selected === 'connections'}/>
+            <Tab onClick={() => onSelect('connections')}>
+                <TabImage src={connections} selected={screen === 'connections'}/>
                 <Text>Vztahy</Text>
             </Tab>
-            <Tab onClick={() => setSelected('groups')}>
-                <TabImage src={groups} selected={selected === 'groups'}/>
+            <Tab onClick={() => onSelect('groups')}>
+                <TabImage src={groups} selected={screen === 'groups'}/>
                 <Text>Skupiny</Text>
             </Tab>
-            <Tab onClick={() => setSelected('list')}>
-                <TabImage src={list} selected={selected === 'list'}/>
+            <Tab onClick={() => onSelect('list')}>
+                <TabImage src={list} selected={screen === 'list'}/>
                 <Text>Seznam</Text>
             </Tab>
         </StyledBottomTabNav>

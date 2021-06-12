@@ -65,7 +65,7 @@ export default function SelectRandom(props) {
             </StudentTable>
             <Control>
                 <Title>Odpovída teď:</Title>
-                <Student style={!currentStudent ? {opacity: 0} : {}} onClick={returnCurrent}>{currentStudent}</Student>
+                <Student style={!currentStudent ? {display: 'none'} : {}} onClick={returnCurrent}>{currentStudent}</Student>
                 <Button ph={'3rem'} onClick={handleButton}>Dalsí</Button>
             </Control>
             <StudentTable>
@@ -99,9 +99,10 @@ const Control = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     position: absolute;
     width: 100%;
+    min-height: 18rem;
     && > * {
         margin: 1.5rem 0;
     }

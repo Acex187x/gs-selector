@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Text from '../Atoms/Text'
 import { getClassColorSchema } from '../core'
 
-const names = ['Kunratický Špek', '@Acex187x', 'Illia Špek', 'Špekovy Hacker', '@my_acex', 'Občan Ukrajiny', 'Detektyvní Špek', 'Občan Kryveho Rohu']
+const names = ['Kunratický Špek', '@Acex187x', 'Illia Špek', 'Špekový Hacker', '@my_acex', 'Občan Ukrajiny', 'Detektyvní Špek', 'Občan Kriveho Rohu']
 const name = names[~~(Math.random() * names.length)]
 
 export default function Footer(props) {

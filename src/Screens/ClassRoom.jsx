@@ -7,24 +7,27 @@ import { getClassColorSchema, getStudentsOfClass } from '../core'
 import Connections from './Connections'
 import Groups from './Groups'
 import SelectRandom from './SelectRandom'
+import Missing from './Missing'
 import List from './List'
 import { Link } from 'react-router-dom'
 import Text from '../Atoms/Text'
 
 const pages = {
-    'random': 0,
-    'connections': 1,
-    'groups': 2,
-    'list': 3,
+    'missing': 0,
+    'random': 1,
+    'connections': 2,
+    'groups': 3,
+    'list': 4,
 }
 
 export default function ClassRoom(props) {
 
     const { style } = props
-    const [screen, setScreen] = useState('random')
+    const [screen, setScreen] = useState('missing')
     const [isAnimating, setIsAnimating] = useState(false);
     const params = useParams()
-    const students = getStudentsOfClass(params.classname)
+    const [sleepingStudents, setSleepingStudents] = useState([]);
+    const students = getStudentsOfClass(params.classname).filter(s => !~sleepingStudents.indexOf(s))
 
     const handleSelect = (s) => {
         setScreen(s)
@@ -32,13 +35,30 @@ export default function ClassRoom(props) {
         setTimeout(() => setIsAnimating(false), 500)
     }
 
+    const handleMissing = (s) => {
+        if (sleepingStudents.find(ss => ss === s)) { // remove (sleeping = > !sleeping)
+            setSleepingStudents(sleepingStudents.filter(ss => ss !== s))
+        } else { // add (!sleeping => sleeping)
+            if (students.length - sleepingStudents.length <= 1) return;
+            setSleepingStudents([...sleepingStudents, s])
+        }
+    }
+
     return (
         <StyledClassRoom style={style} bg={getClassColorSchema(params.classname).bg}>
-            <Title size={'2rem'} mb={'2rem'} center>Skupina {params.classname}</Title>
-            <Back>
+            <Header>
                 <Link to={'/'}><Text center size={'.8rem'}>Zpět na výběr tříd</Text></Link>
-            </Back>
+                <Title size={'2rem'} mb={'2rem'} center>Skupina {params.classname}</Title>
+                <a href="#" onClick={() => handleSelect('missing')} style={{display: 'flex', justifyContent: 'flex-end'}}><Text center size={'.8rem'}>Vybrat chybějící studenty</Text></a>
+            </Header>
             <ScreenSwiper page={pages[screen]} isAnimating={isAnimating}>
+                {
+                    (screen === 'missing' || isAnimating) && (
+                        <SwiperScreenContainer>
+                            <Missing onSelect={handleMissing} students={getStudentsOfClass(params.classname)} missingList={sleepingStudents} />
+                        </SwiperScreenContainer>
+                    )
+                }
                 {
                     (screen === 'random' || isAnimating) && (
                         <SwiperScreenContainer>
@@ -68,7 +88,7 @@ export default function ClassRoom(props) {
                     )
                 }
             </ScreenSwiper>
-            <BottomTabNav onSelect={handleSelect} />
+            <BottomTabNav screen={screen} onSelect={handleSelect} />
         </StyledClassRoom>
     )
 }
@@ -109,4 +129,14 @@ const Back = styled.div`
     left: 2rem;
     top: 2rem;
     z-index: 5;
+`
+
+const Header = styled.div`
+    width: 100%;
+    display: flex;
+    z-index: 5;
+    /* justify-content: space-between; */
+    && > * {
+        flex: 1;
+    }
 `

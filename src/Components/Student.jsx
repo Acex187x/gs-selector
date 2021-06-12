@@ -29,7 +29,7 @@ const skinColorCombinations = [
 ]
 
 export default function Student(props) {
-    const { style, children, scale, onClick } = props
+    const { style, children, scale, onClick, sleeping } = props
     let tShortColor, hairColor, skinColor;
     if (children && typeof children === 'string') {
         tShortColor = tShortCombinations[getRandomNumberFromString(children, tShortCombinations.length, 0)]
@@ -63,7 +63,7 @@ export default function Student(props) {
     }
 
     return (
-        <StyledStudent style={style} scale={scale || 1} onClick={onClick} className="student">
+        <StyledStudent style={style} scale={scale || 1} onClick={onClick} className="student" sleeping={sleeping}>
             {/* <Avatar src={man} scale={scale || 1} /> */}
             <svg id="Layer_1" enable-background="new 0 0 464.056 464.056" height={`${(scale || 1)  * 2.5}rem`} viewBox="0 0 464.056 464.056" width={`${(scale || 1) * 2.5}rem`}
                 xmlns="http://www.w3.org/2000/svg">
@@ -102,6 +102,12 @@ const StyledStudent = styled.div`
        align-items: center; 
        margin-left: ${p => p.scale  * 0.5}rem;
     }
+
+    transition: opacity .2s, transform .2s;
+    ${p => p.sleeping ? `
+        opacity: .5;
+        transform: scale(.95);
+    ` : ''}
 `
 
 const Avatar = styled.img`
