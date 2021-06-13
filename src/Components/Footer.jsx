@@ -33,7 +33,7 @@ export default function Footer(props) {
     return (
         <StyledFooter style={style} color={params.classname ? getClassColorSchema(params.classname).bg || 'white' : 'white'}>
             <Text size={'0.8rem'}>Made with ❤️ by {name || 'Kunratický Špek'}</Text>
-            <Text size={'0.6rem'}>Special for GoStudy, Andrea Bublikova and Jan Šetek</Text>
+            <Text size={'0.6rem'}>Special for Andrea Bublikova and Jan Šetek</Text>
         </StyledFooter>
     )
 }
